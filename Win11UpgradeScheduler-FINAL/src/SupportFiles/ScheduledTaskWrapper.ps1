@@ -346,10 +346,33 @@ function Invoke-PreFlightChecks {
                         
                         # Use PSADT to show error - escape message properly
                         $escapedMessage = $message -replace '"', '`"' -replace '\$', '`$'
-                        $errorScript = ". '$toolkitMain'
-Show-InstallationPrompt -Message `"$escapedMessage`" -ButtonRightText 'OK' -Icon Error"
+                        $errorScript = @"
+# Debug logging
+Add-Content -Path "`$env:TEMP\PreFlightError_Debug.log" -Value "[`$(Get-Date)] Starting PreFlightError script"
+Add-Content -Path "`$env:TEMP\PreFlightError_Debug.log" -Value "[`$(Get-Date)] Toolkit path: $toolkitMain"
+Add-Content -Path "`$env:TEMP\PreFlightError_Debug.log" -Value "[`$(Get-Date)] Message: $escapedMessage"
+
+# Load PSADT toolkit
+try {
+    . '$toolkitMain'
+    Add-Content -Path "`$env:TEMP\PreFlightError_Debug.log" -Value "[`$(Get-Date)] Toolkit loaded successfully"
+} catch {
+    Add-Content -Path "`$env:TEMP\PreFlightError_Debug.log" -Value "[`$(Get-Date)] Error loading toolkit: `$_"
+}
+
+# Show the prompt
+try {
+    Show-InstallationPrompt -Message "$escapedMessage" -ButtonRightText 'OK' -Icon Error
+    Add-Content -Path "`$env:TEMP\PreFlightError_Debug.log" -Value "[`$(Get-Date)] Prompt shown successfully"
+} catch {
+    Add-Content -Path "`$env:TEMP\PreFlightError_Debug.log" -Value "[`$(Get-Date)] Error showing prompt: `$_"
+}
+"@
                         $tempErrorScript = Join-Path -Path $env:TEMP -ChildPath "PreFlightError_$(Get-Date -Format 'yyyyMMddHHmmss').ps1"
                         $errorScript | Set-Content -Path $tempErrorScript -Force
+                        
+                        Write-WrapperLog -Message "Created error script at: $tempErrorScript"
+                        Write-WrapperLog -Message "Toolkit path: $toolkitMain"
                         
                         Execute-ProcessAsUser -Path "$PSHOME\powershell.exe" `
                             -Parameters "-ExecutionPolicy Bypass -File `"$tempErrorScript`"" `

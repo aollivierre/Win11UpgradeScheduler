@@ -167,10 +167,12 @@ Try {
             # Create a temporary script to show the prompt
             $tempScript = Join-Path -Path $env:TEMP -ChildPath "ScheduledPrompt_$(Get-Date -Format 'yyyyMMddHHmmss').ps1"
             
+            # Build the full toolkit path
+            $toolkitPath = Join-Path -Path $PSScriptRoot -ChildPath "AppDeployToolkit\AppDeployToolkitMain.ps1"
+            
             $scriptContent = @"
 # Load PSADT toolkit
-`$scriptPath = '$PSScriptRoot'
-. "`$scriptPath\AppDeployToolkit\AppDeployToolkitMain.ps1"
+. "$toolkitPath"
 
 # Show the prompt
 Show-InstallationPrompt -Message '$($Message -replace "'", "''")'` -ButtonRightText '$ButtonRightText' -Icon '$Icon' -Timeout $Timeout
