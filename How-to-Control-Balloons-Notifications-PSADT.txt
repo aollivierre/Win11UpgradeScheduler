@@ -1,0 +1,23 @@
+Main Controls for Balloon Notifications:
+
+  1. $configShowBalloonNotifications - The master switch
+    - Loaded from XML config by default
+    - Can be overridden in script
+    - Automatically set to $false in Silent mode
+  2. Exit Code Logic in Exit-Script:
+    - Exit code 0 → "Installation complete" (success)
+    - Exit code 3010/1641 → "Installation complete. A reboot is required" (success)
+    - Exit code 1618 → "Installation not complete" (our OS check failure)
+    - Other codes → "Installation failed"
+  3. The Double Balloon Issue was caused by:
+    - First call: Exit-Script -ExitCode 1618 (from OS check)
+    - Second call: Exit-Script -ExitCode $mainExitCode (from Finally block)
+    - Both would show balloons unless controlled
+
+  Our Fix:
+
+  1. Set $configShowBalloonNotifications = $false when OS check fails
+  2. Set $script:OSCheckFailed = $true flag
+  3. Skip the Finally block's Exit-Script if OS check already failed
+
+  This ensures users only see the OS compatibility dialog, not the confusing balloon notifications!
