@@ -147,6 +147,9 @@ Try {
         
         if (-not $osCheckResult) {
             Write-Log -Message "OS compatibility check failed - exiting deployment" -Source $deployAppScriptFriendlyName -Severity 2
+            # Disable balloon notifications for OS check failures
+            $configShowBalloonNotifications = $false
+            $script:OSCheckFailed = $true
             Exit-Script -ExitCode 1618  # Another installation is already in progress
         }
         
@@ -154,6 +157,9 @@ Try {
         
         # Initialize scheduling complete flag
         $script:SchedulingComplete = $false
+        
+        # Initialize OS check exit flag
+        $script:OSCheckFailed = $false
         
         # Control PSADT balloon notifications
         $configShowBalloonNotifications = $true
@@ -983,6 +989,9 @@ Catch {
     Exit-Script -ExitCode 60001
 }
 Finally {
-    # Call the Exit-Script function to perform final cleanup operations
-    Exit-Script -ExitCode $mainExitCode
+    # Only call Exit-Script if we haven't already exited due to OS check
+    if (-not $script:OSCheckFailed) {
+        # Call the Exit-Script function to perform final cleanup operations
+        Exit-Script -ExitCode $mainExitCode
+    }
 }
