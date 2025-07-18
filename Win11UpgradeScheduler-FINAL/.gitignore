@@ -1,0 +1,45 @@
+# Windows 11 installation media (too large for git)
+src/Files/*.iso
+src/Files/*.wim
+src/Files/*.esd
+
+# Test outputs
+tests/Test-Results/*.log
+tests/Test-Results/*.txt
+tests/Test-Results/temp/
+
+# Temporary files
+*.tmp
+*.temp
+~$*
+
+# System files
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# PowerShell module cache
+*.psd1.bak
+*.psm1.bak
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-*
+
+# Build outputs
+build/
+dist/
+out/
+
+# Logs
+*.log
+logs/
+
+# User-specific files
+*.user
+*.suo
+
+# Archive working files
+archive/temp-work/
+archive/uncategorized/*.tmp

@@ -1,0 +1,22 @@
+Windows 11 Upgrade Scheduler Project Migration Log
+=================================================
+Started: 2025-07-16 10:30:00
+Source: C:\code\Windows\
+Target: C:\code\Windows\Win11UpgradeScheduler-FINAL\
+
+File Movements:
+--------------
+[PSADT Framework]
+From: Phase1-Detection\Win11Scheduler-PSADT-v3\AppDeployToolkit\*
+To: Win11UpgradeScheduler-FINAL\src\AppDeployToolkit
+[Main Deployment Script]
+From: Phase1-Detection\Win11Scheduler-PSADT-v3\Deploy-Application-Enhanced.ps1
+To: Win11UpgradeScheduler-FINAL\src\Deploy-Application.ps1
+
+[Cleanup - Folders]
+- Removed Win11UpgradeScheduler-ORGANIZED (contents in archive\iterations\v2-enhanced)
+- Removed Win11UpgradeScheduler (contents organized in FINAL structure)
+[FINAL ARCHIVE - Phase1-Detection]
+- Archived Phase1-Detection\Win11Scheduler-PSADT-v3 to archive\original-development\
+- Created ARCHIVE-README.md for reference
+- Original location now cleaned up

@@ -1,0 +1,134 @@
+[07-16-2025 14:08:09.810] [Get-LoggedOnUser] :: Getting session information for all logged on users.
+[07-16-2025 14:08:09.939] [Get-RegistryKey] :: Registry key [Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MUI\Settings] does not exist. Return $null.
+[07-16-2025 14:08:09.957] [Get-RegistryKey] :: Registry key [Registry::HKEY_USERS\S-1-5-21-2396358616-3519114550-3367725851-500\Software\Policies\Microsoft\Windows\Control Panel\Desktop] does not exist. Return $null.
+[07-16-2025 14:08:09.969] [Get-RegistryKey] :: Getting registry key [Registry::HKEY_USERS\S-1-5-21-2396358616-3519114550-3367725851-500\Control Panel\Desktop] value [PreferredUILanguages].
+[07-16-2025 14:08:09.980] [Get-RegistryKey] :: Registry key value [Registry::HKEY_USERS\S-1-5-21-2396358616-3519114550-3367725851-500\Control Panel\Desktop] [PreferredUILanguages] does not exist. Return $null.
+[07-16-2025 14:08:10.017] [Get-RegistryKey] :: Getting registry key [Registry::HKEY_USERS\S-1-5-21-2396358616-3519114550-3367725851-500\Control Panel\Desktop\MuiCached] value [MachinePreferredUILanguages].
+[07-16-2025 14:08:10.317] [Initialization] [PSAppDeployToolkit] :: *******************************************************************************
+[07-16-2025 14:08:10.317] [Initialization] [PSAppDeployToolkit] :: *******************************************************************************
+[07-16-2025 14:08:10.336] [Initialization] [PSAppDeployToolkit] :: [Windows11Upgrade] setup started.
+[07-16-2025 14:08:10.373] [Initialization] [PSAppDeployToolkit] :: Script [C:\code\Windows\Win11UpgradeScheduler-FINAL\src\AppDeployToolkit\AppDeployToolkitMain.ps1] dot-source invoked by [C:\code\Windows\Win11UpgradeScheduler-FINAL\src\Deploy-Application.ps1]
+[07-16-2025 14:08:10.381] [Initialization] [PSAppDeployToolkitExt] :: Script [C:\code\Windows\Win11UpgradeScheduler-FINAL\src\AppDeployToolkit\AppDeployToolkitExtensions.ps1] dot-source invoked by [C:\code\Windows\Win11UpgradeScheduler-FINAL\src\AppDeployToolkit\AppDeployToolkitMain.ps1]
+[07-16-2025 14:08:10.399] [Initialization] [PSAppDeployToolkit] :: [Windows11Upgrade] script version is [2.0.0]
+[07-16-2025 14:08:10.404] [Initialization] [PSAppDeployToolkit] :: [Windows11Upgrade] script date is [01/15/2025]
+[07-16-2025 14:08:10.408] [Initialization] [PSAppDeployToolkit] :: [Windows11Upgrade] script author is [IT Department]
+[07-16-2025 14:08:10.412] [Initialization] [PSAppDeployToolkit] :: [App Deploy Toolkit Main] script version is [3.10.2]
+[07-16-2025 14:08:10.416] [Initialization] [PSAppDeployToolkit] :: [App Deploy Toolkit Extensions] version is [3.10.1]
+[07-16-2025 14:08:10.421] [Initialization] [PSAppDeployToolkit] :: Computer Name is [Win10Upgrade.abc.local]
+[07-16-2025 14:08:10.425] [Initialization] [PSAppDeployToolkit] :: Current User is [ABC\administrator]
+[07-16-2025 14:08:10.429] [Initialization] [PSAppDeployToolkit] :: OS Version is [Microsoft Windows 10 Pro 64-bit 10.0.19045.6093]
+[07-16-2025 14:08:10.433] [Initialization] [PSAppDeployToolkit] :: OS Type is [Workstation]
+[07-16-2025 14:08:10.439] [Initialization] [PSAppDeployToolkit] :: Current Culture is [en-US], language is [EN] and UI language is [EN]
+[07-16-2025 14:08:10.450] [Initialization] [Get-HardwarePlatform] :: Retrieving hardware platform information.
+[07-16-2025 14:08:10.470] [Initialization] [PSAppDeployToolkit] :: Hardware Platform is [Virtual:Hyper-V]
+[07-16-2025 14:08:10.478] [Initialization] [PSAppDeployToolkit] :: PowerShell Host is [ConsoleHost] with version [5.1.19041.6093]
+[07-16-2025 14:08:10.482] [Initialization] [PSAppDeployToolkit] :: PowerShell Version is [5.1.19041.6093 x64]
+[07-16-2025 14:08:10.486] [Initialization] [PSAppDeployToolkit] :: PowerShell CLR (.NET) version is [4.0.30319.42000]
+[07-16-2025 14:08:10.490] [Initialization] [PSAppDeployToolkit] :: *******************************************************************************
+[07-16-2025 14:08:10.502] [Initialization] [PSAppDeployToolkit] :: Display session information for all logged on users: 
+
+
+NTAccount           : ABC\administrator
+SID                 : S-1-5-21-2396358616-3519114550-3367725851-500
+UserName            : administrator
+DomainName          : ABC
+SessionId           : 2
+SessionName         : RDP-Tcp#1
+ConnectState        : Active
+IsCurrentSession    : True
+IsConsoleSession    : False
+IsActiveUserSession : True
+IsUserSession       : True
+IsRdpSession        : True
+IsLocalAdmin        : False
+LogonTime           : 7/16/2025 8:58:13 AM
+IdleTime            : 00:00:04.0086556
+DisconnectTime      : 
+ClientName          : DESKTOP-DNKI2N1
+ClientProtocolType  : RDP
+ClientDirectory     : C:\WINDOWS\system32\mstscax.dll
+ClientBuildNumber   : 26100
+
+
+
+
+[07-16-2025 14:08:10.507] [Initialization] [PSAppDeployToolkit] :: The following users are logged on to the system: [ABC\administrator].
+[07-16-2025 14:08:10.511] [Initialization] [PSAppDeployToolkit] :: Current process is running with user account [ABC\administrator] under logged in user session for [ABC\administrator].
+[07-16-2025 14:08:10.667] [Initialization] [PSAppDeployToolkit] :: There is no console user logged in (user with control of physical monitor, keyboard, and mouse).
+[07-16-2025 14:08:10.672] [Initialization] [PSAppDeployToolkit] :: The active logged on user is [ABC\administrator].
+[07-16-2025 14:08:10.676] [Initialization] [PSAppDeployToolkit] :: The active logged on user [ABC\administrator] has a primary UI language of [EN].
+[07-16-2025 14:08:10.681] [Initialization] [PSAppDeployToolkit] :: The following UI messages were imported from the config XML file: [UI_Messages_EN].
+[07-16-2025 14:08:10.685] [Initialization] [PSAppDeployToolkit] :: The active logged on user [ABC\administrator] has a DPI scale factor of [100] with DPI pixels [96].
+[07-16-2025 14:08:10.700] [Initialization] [PSAppDeployToolkit] :: Unable to load COM Object [Microsoft.SMS.TSEnvironment]. Therefore, script is not currently running from a SCCM Task Sequence.
+[07-16-2025 14:08:10.705] [Initialization] [PSAppDeployToolkit] :: Skipping attempt to check for and make the task scheduler services healthy, because the App Deployment Toolkit is not running under the [NT AUTHORITY\SYSTEM] account.
+[07-16-2025 14:08:10.709] [Initialization] [PSAppDeployToolkit] :: Session 0 not detected.
+[07-16-2025 14:08:10.714] [Initialization] [PSAppDeployToolkit] :: Installation is running in [Interactive] mode.
+[07-16-2025 14:08:10.718] [Initialization] [PSAppDeployToolkit] :: Deployment type is [Installation].
+[07-16-2025 14:08:10.737] [Execution] :: Loading enhanced calendar picker from: C:\code\Windows\Win11UpgradeScheduler-FINAL\src\SupportFiles\UI\01-Show-EnhancedCalendarPicker.ps1
+[07-16-2025 14:08:10.743] [Execution] :: Calendar picker override configured
+[07-16-2025 14:08:10.745] [Execution] :: Starting Windows 11 Upgrade v2.0.0 deployment
+[07-16-2025 14:08:11.241] [Execution] :: Running pre-flight checks
+[07-16-2025 14:08:11.309] [Execution] [Test-PowerPoint] :: Checking if PowerPoint is in either fullscreen slideshow mode or presentation mode...
+[07-16-2025 14:08:11.325] [Execution] [Test-PowerPoint] :: PowerPoint application is not running.
+[07-16-2025 14:08:11.331] [Execution] [Test-PowerPoint] :: PowerPoint is running in fullscreen mode [False].
+[07-16-2025 14:08:11.339] [Execution] [Show-BalloonTip] :: Displaying balloon tip notification with message [Installation started.].
+[07-16-2025 14:08:11.410] [Execution] [Show-InstallationProgress] :: Creating the progress dialog in a separate thread with message: [Checking system readiness...].
+[07-16-2025 14:08:26.151] [Execution] [Close-InstallationProgress] :: Closing the installation progress dialog.
+[07-16-2025 14:08:26.158] [Execution] [Close-InstallationProgress] :: Closing the installation progress dialog's runspace.
+[07-16-2025 14:08:26.183] [Execution] [Show-UpgradeInformationDialog] :: Loading Windows 11 upgrade information dialog...
+[07-16-2025 14:08:26.216] [Execution] [Show-UpgradeInformationDialog] :: Displaying Windows 11 upgrade information dialog
+[07-16-2025 14:08:27.756] [Execution] [Show-UpgradeInformationDialog] :: User selected 'Schedule'
+[07-16-2025 14:08:27.769] [Execution] [Show-UpgradeInformationDialog] :: User choice: Schedule
+[07-16-2025 14:08:28.024] [Execution] [Close-InstallationProgress] :: The installation progress dialog does not exist. Waiting up to 5 seconds...
+[07-16-2025 14:08:33.069] [Execution] [Close-InstallationProgress] :: The installation progress dialog was not created within 5 seconds.
+[07-16-2025 14:08:33.083] [Execution] [Show-InstallationPrompt] :: Displaying custom installation prompt with the parameters: [-ButtonLeftText:'Schedule' -ButtonRightText:'Cancel' -ButtonMiddleText:'Upgrade Now' -Message:'When would you like to schedule the Windows 11 upgrade?
+
+The upgrade will take 1-2 hours and your computer will restart several times.
+
+Quick scheduling options:
+- Tonight (8PM, 10PM, or 11PM)
+- Tomorrow (Morning, Afternoon, or Evening)
+- Custom date and time
+- Upgrade now' -Icon:'Information'].
+[07-16-2025 14:09:19.800] [Execution] :: User chose to schedule upgrade
+[07-16-2025 14:09:19.805] [Execution] :: Checking for calendar picker function...
+[07-16-2025 14:09:19.807] [Execution] :: Calendar picker function found, displaying...
+[07-16-2025 14:09:19.808] [Execution] :: Show-CalendarPicker wrapper called, invoking Show-EnhancedCalendarPicker
+[07-16-2025 14:09:21.805] [Execution] :: Calendar picker returned: Tonight - 10PM
+[07-16-2025 14:09:21.812] [Execution] :: Calling New-QuickUpgradeSchedule with: When=Tonight, Time=10PM, PSADTPath=C:\code\Windows\Win11UpgradeScheduler-FINAL\src, DeployMode=Interactive
+
+TaskPath                                       TaskName                          State     
+--------                                       --------                          -----     
+\Microsoft\Windows\Win11Upgrade\               Windows11UpgradeScheduled         Ready     
+[07-16-2025 14:09:21.968] [Execution] :: Schedule created successfully, retrieving schedule info...
+[07-16-2025 14:09:22.557] [Execution] :: Failed to create schedule: Cannot convert null to type "System.DateTime".
+[07-16-2025 14:09:22.574] [Execution] [Close-InstallationProgress] :: The installation progress dialog does not exist. Waiting up to 5 seconds...
+[07-16-2025 14:09:27.599] [Execution] [Close-InstallationProgress] :: The installation progress dialog was not created within 5 seconds.
+[07-16-2025 14:09:27.602] [Execution] [Show-InstallationPrompt] :: Displaying custom installation prompt with the parameters: [-ButtonRightText:'OK' -Icon:'Error' -Message:'Failed to schedule upgrade: Cannot convert null to type "System.DateTime".'].
+OK
+[07-16-2025 14:09:50.409] [Execution] [Close-InstallationProgress] :: The installation progress dialog does not exist. Waiting up to 5 seconds...
+[07-16-2025 14:09:55.457] [Execution] [Close-InstallationProgress] :: The installation progress dialog was not created within 5 seconds.
+[07-16-2025 14:09:55.463] [Execution] [Exit-Script] :: Windows11Upgrade Installation completed with exit code [1603].
+[07-16-2025 14:09:55.493] [Execution] [Test-PowerPoint] :: Checking if PowerPoint is in either fullscreen slideshow mode or presentation mode...
+[07-16-2025 14:09:55.504] [Execution] [Test-PowerPoint] :: PowerPoint application is not running.
+[07-16-2025 14:09:55.508] [Execution] [Test-PowerPoint] :: PowerPoint is running in fullscreen mode [False].
+[07-16-2025 14:09:55.515] [Execution] [Show-BalloonTip] :: Displaying balloon tip notification asynchronously with message [Installation failed.].
+[07-16-2025 14:09:55.543] [Execution] [Execute-Process] :: [C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe] is a valid fully qualified path, continue.
+[07-16-2025 14:09:55.569] [Execution] [Execute-Process] :: UseShellExecute is set to true, standard output and error will not be available.
+[07-16-2025 14:09:55.576] [Execution] [Execute-Process] :: Working Directory is [C:\Windows\System32\WindowsPowerShell\v1.0].
+[07-16-2025 14:09:55.580] [Execution] [Execute-Process] :: Executing [C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe [PowerShell ScriptBlock]]...
+[07-16-2025 14:09:55.619] [Execution] [Execute-Process] :: NoWait parameter specified. Continuing without waiting for exit code...
+[07-16-2025 14:09:55.630] [Execution] [Exit-Script] :: -------------------------------------------------------------------------------
+[07-16-2025 14:09:55.641] [Execution] [Close-InstallationProgress] :: The installation progress dialog does not exist. Waiting up to 5 seconds...
+[07-16-2025 14:10:00.685] [Execution] [Close-InstallationProgress] :: The installation progress dialog was not created within 5 seconds.
+[07-16-2025 14:10:00.697] [Execution] [Exit-Script] ::  Installation completed with exit code [0].
+[07-16-2025 14:10:00.705] [Execution] [Test-PowerPoint] :: Checking if PowerPoint is in either fullscreen slideshow mode or presentation mode...
+[07-16-2025 14:10:00.711] [Execution] [Test-PowerPoint] :: PowerPoint application is not running.
+[07-16-2025 14:10:00.713] [Execution] [Test-PowerPoint] :: PowerPoint is running in fullscreen mode [False].
+[07-16-2025 14:10:00.728] [Execution] [Show-BalloonTip] :: Displaying balloon tip notification asynchronously with message [Installation complete.].
+[07-16-2025 14:10:00.734] [Execution] [Execute-Process] :: [C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe] is a valid fully qualified path, continue.
+[07-16-2025 14:10:00.737] [Execution] [Execute-Process] :: UseShellExecute is set to true, standard output and error will not be available.
+[07-16-2025 14:10:00.739] [Execution] [Execute-Process] :: Working Directory is [C:\Windows\System32\WindowsPowerShell\v1.0].
+[07-16-2025 14:10:00.741] [Execution] [Execute-Process] :: Executing [C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe [PowerShell ScriptBlock]]...
+[07-16-2025 14:10:00.759] [Execution] [Execute-Process] :: NoWait parameter specified. Continuing without waiting for exit code...
+[07-16-2025 14:10:00.763] [Execution] [Exit-Script] :: -------------------------------------------------------------------------------

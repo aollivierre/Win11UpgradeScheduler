@@ -1,0 +1,226 @@
+{
+    "Passed":  8,
+    "Details":  [
+                    {
+                        "StartTime":  {
+                                          "value":  "\/Date(1752619207379)\/",
+                                          "DisplayHint":  2,
+                                          "DateTime":  "Tuesday, July 15, 2025 5:40:07 PM"
+                                      },
+                        "Duration":  0.10196079999999999,
+                        "Details":  {
+                                        "Functions":  [
+                                                          "Get-UpgradeSchedule",
+                                                          "New-UpgradeSchedule",
+                                                          "Write-SchedulerLog"
+                                                      ]
+                                    },
+                        "Category":  "Module",
+                        "EndTime":  {
+                                        "value":  "\/Date(1752619207481)\/",
+                                        "DisplayHint":  2,
+                                        "DateTime":  "Tuesday, July 15, 2025 5:40:07 PM"
+                                    },
+                        "Name":  "UpgradeScheduler Module Structure",
+                        "Success":  true,
+                        "Error":  null,
+                        "Message":  "Module loaded with 3 functions"
+                    },
+                    {
+                        "StartTime":  {
+                                          "value":  "\/Date(1752619207487)\/",
+                                          "DisplayHint":  2,
+                                          "DateTime":  "Tuesday, July 15, 2025 5:40:07 PM"
+                                      },
+                        "Duration":  0.4079982,
+                        "Details":  {
+                                        "Issues":  {
+
+                                                   },
+                                        "IsReady":  true,
+                                        "Checks":  {
+                                                       "DiskSpace":  {
+                                                                         "Message":  "Disk space: 57.62GB free",
+                                                                         "FreeSpaceGB":  57.62,
+                                                                         "Passed":  true
+                                                                     }
+                                                   }
+                                    },
+                        "Category":  "Module",
+                        "EndTime":  {
+                                        "value":  "\/Date(1752619207895)\/",
+                                        "DisplayHint":  2,
+                                        "DateTime":  "Tuesday, July 15, 2025 5:40:07 PM"
+                                    },
+                        "Name":  "PreFlightChecks Module Structure",
+                        "Success":  true,
+                        "Error":  null,
+                        "Message":  "Pre-flight module operational"
+                    },
+                    {
+                        "StartTime":  {
+                                          "value":  "\/Date(1752619207898)\/",
+                                          "DisplayHint":  2,
+                                          "DateTime":  "Tuesday, July 15, 2025 5:40:07 PM"
+                                      },
+                        "Duration":  0.024000399999999998,
+                        "Details":  {
+                                        "Message":  "Disk space: 57.62GB free",
+                                        "FreeSpaceGB":  57.62,
+                                        "Passed":  true
+                                    },
+                        "Category":  "PreFlight",
+                        "EndTime":  {
+                                        "value":  "\/Date(1752619207922)\/",
+                                        "DisplayHint":  2,
+                                        "DateTime":  "Tuesday, July 15, 2025 5:40:07 PM"
+                                    },
+                        "Name":  "Disk Space Check",
+                        "Success":  true,
+                        "Error":  null,
+                        "Message":  "Disk space: 57.62GB free (Required: 64GB for production)"
+                    },
+                    {
+                        "StartTime":  {
+                                          "value":  "\/Date(1752619207926)\/",
+                                          "DisplayHint":  2,
+                                          "DateTime":  "Tuesday, July 15, 2025 5:40:07 PM"
+                                      },
+                        "Duration":  0.0269995,
+                        "Details":  {
+                                        "Issues":  {
+
+                                                   },
+                                        "IsReady":  true,
+                                        "Checks":  {
+                                                       "DiskSpace":  {
+                                                                         "Message":  "Disk space: 57.62GB free",
+                                                                         "FreeSpaceGB":  57.62,
+                                                                         "Passed":  true
+                                                                     }
+                                                   }
+                                    },
+                        "Category":  "PreFlight",
+                        "EndTime":  {
+                                        "value":  "\/Date(1752619207953)\/",
+                                        "DisplayHint":  2,
+                                        "DateTime":  "Tuesday, July 15, 2025 5:40:07 PM"
+                                    },
+                        "Name":  "System Readiness Check",
+                        "Success":  true,
+                        "Error":  null,
+                        "Message":  "System ready"
+                    },
+                    {
+                        "StartTime":  {
+                                          "value":  "\/Date(1752619207958)\/",
+                                          "DisplayHint":  2,
+                                          "DateTime":  "Tuesday, July 15, 2025 5:40:07 PM"
+                                      },
+                        "Duration":  0.0460007,
+                        "Details":  {
+                                        "Path":  "C:\\code\\Windows\\Win11UpgradeScheduler\\SupportFiles\\ScheduledTaskWrapper.ps1"
+                                    },
+                        "Category":  "Wrapper",
+                        "EndTime":  {
+                                        "value":  "\/Date(1752619208004)\/",
+                                        "DisplayHint":  2,
+                                        "DateTime":  "Tuesday, July 15, 2025 5:40:08 PM"
+                                    },
+                        "Name":  "Wrapper Script Syntax",
+                        "Success":  true,
+                        "Error":  null,
+                        "Message":  "Wrapper script syntax valid"
+                    },
+                    {
+                        "StartTime":  {
+                                          "value":  "\/Date(1752619208005)\/",
+                                          "DisplayHint":  2,
+                                          "DateTime":  "Tuesday, July 15, 2025 5:40:08 PM"
+                                      },
+                        "Duration":  0.0249997,
+                        "Details":  {
+                                        "ExplorerProcesses":  1,
+                                        "SessionDetected":  true
+                                    },
+                        "Category":  "Wrapper",
+                        "EndTime":  {
+                                        "value":  "\/Date(1752619208030)\/",
+                                        "DisplayHint":  2,
+                                        "DateTime":  "Tuesday, July 15, 2025 5:40:08 PM"
+                                    },
+                        "Name":  "Session Detection Logic",
+                        "Success":  true,
+                        "Error":  null,
+                        "Message":  "Current session: Attended"
+                    },
+                    {
+                        "StartTime":  {
+                                          "value":  "\/Date(1752619208031)\/",
+                                          "DisplayHint":  2,
+                                          "DateTime":  "Tuesday, July 15, 2025 5:40:08 PM"
+                                      },
+                        "Duration":  0.025001799999999998,
+                        "Details":  null,
+                        "Category":  "PSADT",
+                        "EndTime":  {
+                                        "value":  "\/Date(1752619208056)\/",
+                                        "DisplayHint":  2,
+                                        "DateTime":  "Tuesday, July 15, 2025 5:40:08 PM"
+                                    },
+                        "Name":  "Deploy-Application.ps1 Structure",
+                        "Success":  false,
+                        "Error":  null,
+                        "Message":  "Deploy-Application.ps1 not found"
+                    },
+                    {
+                        "StartTime":  {
+                                          "value":  "\/Date(1752619208057)\/",
+                                          "DisplayHint":  2,
+                                          "DateTime":  "Tuesday, July 15, 2025 5:40:08 PM"
+                                      },
+                        "Duration":  0.0199973,
+                        "Details":  {
+                                        "Path":  "C:\\code\\Windows\\Phase1-Detection\\Win11Scheduler-PSADT-v3\\AppDeployToolkit\\AppDeployToolkitMain.ps1"
+                                    },
+                        "Category":  "PSADT",
+                        "EndTime":  {
+                                        "value":  "\/Date(1752619208077)\/",
+                                        "DisplayHint":  2,
+                                        "DateTime":  "Tuesday, July 15, 2025 5:40:08 PM"
+                                    },
+                        "Name":  "PSADT Toolkit Files",
+                        "Success":  true,
+                        "Error":  null,
+                        "Message":  "PSADT toolkit found in reference location"
+                    },
+                    {
+                        "StartTime":  {
+                                          "value":  "\/Date(1752619208080)\/",
+                                          "DisplayHint":  2,
+                                          "DateTime":  "Tuesday, July 15, 2025 5:40:08 PM"
+                                      },
+                        "Duration":  0.026137,
+                        "Details":  {
+                                        "Scripts":  [
+                                                        "Show-UpgradeInformationDialog.ps1",
+                                                        "Show-CalendarPicker.ps1"
+                                                    ]
+                                    },
+                        "Category":  "UI",
+                        "EndTime":  {
+                                        "value":  "\/Date(1752619208106)\/",
+                                        "DisplayHint":  2,
+                                        "DateTime":  "Tuesday, July 15, 2025 5:40:08 PM"
+                                    },
+                        "Name":  "UI Dialog Scripts",
+                        "Success":  true,
+                        "Error":  null,
+                        "Message":  "All UI scripts found"
+                    }
+                ],
+    "Timestamp":  "2025-07-15 17:40:08",
+    "TotalTests":  9,
+    "Failed":  1,
+    "SuccessRate":  88.89
+}

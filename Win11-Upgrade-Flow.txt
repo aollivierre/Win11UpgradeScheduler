@@ -1,0 +1,91 @@
+WINDOWS 11 SILENT UPGRADE FLOW WITH PSADT
+==========================================
+
+USER LAUNCHES DEPLOYMENT (or SCCM/Intune triggers it)
+                    |
+                    v
+        [Deploy-Application.ps1 Starts]
+                    |
+                    v
+        [PRE-INSTALLATION PHASE]
+                    |
+    +---------------+---------------+
+    |                               |
+    v                               v
+Check Storage                   Check RAM/CPU
+    |                               |
+    +--> FAIL < 25GB               +--> Set Bypass Keys
+    |    Show Error & Exit              |
+    |                                   |
+    +--> WARN 25-50GB                  |
+         Show Warning                   |
+              |                         |
+              v                         v
+         [Download Installation Assistant if needed]
+                    |
+                    v
+        [INSTALLATION PHASE]
+                    |
+    Is Deployment Interactive?
+            |               |
+           YES              NO
+            |               |
+            v               v
+    Show Dialog:        Run Silent:
+    +-----------+       Create Task
+    |Upgrade Now|       Run Immediately  
+    |Schedule   |       Show Balloon
+    +-----------+       "Upgrading..."
+         |     |              
+    Now? |     | Schedule?    
+         |     |              
+         v     v              
+    Create &   Create Task    
+    Run Task   for Tonight
+         |          |
+         |          v
+         |     Also create
+         |     Countdown Task
+         |     (runs 30min before)
+         v          
+    Show Progress
+    "Running in 
+     background"
+
+SCHEDULED TASK RUNS AS SYSTEM:
+Windows11InstallationAssistant.exe /QuietInstall /SkipEULA
+                    |
+                    v
+        [Silent download of Windows 11]
+                    |
+                    v
+        [Silent upgrade process]
+                    |
+                    v
+        [Automatic restart]
+                    |
+                    v
+        [Windows 11 installed!]
+
+
+COUNTDOWN FLOW (for scheduled upgrades):
+=========================================
+Scheduled time - 30 minutes
+            |
+            v
+    Countdown task triggers
+            |
+            v
+    Deploy-Application.exe -ShowCountdown
+            |
+            v
+    Shows countdown window/balloon
+    "Upgrade starts in 30 minutes"
+            |
+    Every minute update
+            |
+            v
+    When timer reaches 0
+            |
+            v
+    Main upgrade task starts automatically

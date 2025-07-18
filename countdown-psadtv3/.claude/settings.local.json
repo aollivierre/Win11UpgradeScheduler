@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git clone:*)",
+      "Bash(git checkout:*)",
+      "Bash(curl:*)",
+      "WebFetch(domain:psappdeploytoolkit.com)",
+      "Bash(find:*)",
+      "Bash(powershell.exe:*)",
+      "Bash(grep:*)",
+      "Bash(powershell:*)"
+    ],
+    "deny": []
+  }
+}

@@ -1,0 +1,77 @@
+WINDOWS 11 UPGRADE SCHEDULER - PROJECT ORGANIZATION SUMMARY
+=========================================================
+
+PROJECT LOCATION: C:\code\Windows\Win11UpgradeScheduler-ORGANIZED\
+
+ORGANIZED STRUCTURE:
+-------------------
+
+1. SOURCE CODE (src/)
+   - Deploy-Application-Enhanced.ps1 (Main enhanced deployment)
+   - Deploy-Application.ps1 (Standard PSADT deployment)
+   - PSADT/ (PowerShell App Deploy Toolkit v3.10.2)
+   - SupportFiles/
+     - Modules/
+       - UpgradeScheduler.psm1 (Scheduling engine)
+       - PreFlightChecks.psm1 (System validation)
+     - UI/
+       - Show-EnhancedCalendarPicker.ps1 (Tonight/Tomorrow options)
+       - Show-UpgradeInformationDialog.ps1
+       - Show-CalendarPicker-Original.ps1
+     - ScheduledTaskWrapper.ps1 (Session handling)
+   - Files/ (Windows 11 media location)
+
+2. DOCUMENTATION (docs/)
+   - 01-Requirements/
+     - Win11UpgradeScheduler_DetailedPrompt.md
+   - 02-Implementation/
+     - README-Implementation.md
+     - IMPLEMENTATION_SUMMARY.md
+   - 03-Testing/
+     - VALIDATION_RESULTS.md
+   - 04-Deployment/
+     - DEPLOYMENT-GUIDE.md
+     - README-Original-PSADT.md
+
+3. TESTS (tests/)
+   - 01-Unit/ (Component tests)
+   - 02-Integration/ (Module integration)
+   - 03-Validation/ (Empirical validation)
+   - Results/ (Test execution results)
+
+4. DEMONSTRATIONS (demos/)
+   - 01-Components/ (Individual feature demos)
+   - 02-Workflow/ (Complete workflow demos)
+
+5. ARCHIVE (archive/)
+   - temp-files/ (Development artifacts)
+   - old-versions/ (Previous iterations)
+
+KEY FILES:
+----------
+- README.md - Main project documentation
+- PROJECT_MAP.md - Detailed project structure
+- Launch-Win11Scheduler.ps1 - Quick launcher script
+
+QUICK START:
+-----------
+1. Open PowerShell as Administrator
+2. Navigate to: C:\code\Windows\Win11UpgradeScheduler-ORGANIZED\
+3. Run: .\Launch-Win11Scheduler.ps1 -Mode Demo
+
+DEPLOYMENT:
+-----------
+For production deployment:
+.\Launch-Win11Scheduler.ps1 -Mode Deploy
+
+ENHANCEMENTS IMPLEMENTED:
+------------------------
+- Same-day scheduling (Tonight: 8PM, 10PM, 11PM)
+- 30-minute countdown for attended sessions
+- Comprehensive pre-flight checks (5 validations)
+- 14-day scheduling limit enforcement
+- Wake computer support
+- Enhanced UI with proper sizing
+
+STATUS: ORGANIZED AND READY FOR USE
+===================================
