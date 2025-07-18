@@ -54,7 +54,10 @@ Param (
     [switch]$DisableLogging = $false,
     
     [Parameter(Mandatory=$false)]
-    [switch]$ScheduledMode = $false
+    [switch]$ScheduledMode = $false,
+    
+    [Parameter(Mandatory=$false)]
+    [switch]$DeveloperMode = $false
 )
 #endregion
 
@@ -98,6 +101,10 @@ Try {
     Import-Module "$PSScriptRoot\PSADTCustomCountdown.psm1" -Force
     
     # Import custom modules
+    if (Test-Path "$dirModules\00-OSCompatibilityCheck.psm1") {
+        Import-Module "$dirModules\00-OSCompatibilityCheck.psm1" -Force
+    }
+    
     if (Test-Path "$dirModules\01-UpgradeScheduler.psm1") {
         Import-Module "$dirModules\01-UpgradeScheduler.psm1" -Force
     }
@@ -126,6 +133,24 @@ Try {
     #region Pre-Installation
     If ($deploymentType -ieq 'Install') {
         Write-Log -Message "Starting $installTitle deployment" -Source $deployAppScriptFriendlyName
+        
+        # Perform early OS compatibility check
+        Write-Log -Message "Performing OS compatibility check (Developer Mode: $DeveloperMode)" -Source $deployAppScriptFriendlyName
+        
+        # Create scriptblock reference to Show-InstallationPrompt
+        $showPromptScriptBlock = {
+            param($Message, $ButtonRightText, $ButtonLeftText, $Icon, [switch]$NoWait)
+            Show-InstallationPrompt -Message $Message -ButtonRightText $ButtonRightText -ButtonLeftText $ButtonLeftText -Icon $Icon -NoWait:$NoWait
+        }
+        
+        $osCheckResult = Invoke-EarlyOSCheck -DeveloperMode:$DeveloperMode -ShowInstallationPrompt $showPromptScriptBlock
+        
+        if (-not $osCheckResult) {
+            Write-Log -Message "OS compatibility check failed - exiting deployment" -Source $deployAppScriptFriendlyName -Severity 2
+            Exit-Script -ExitCode 1618  # Another installation is already in progress
+        }
+        
+        Write-Log -Message "OS compatibility check passed - continuing deployment" -Source $deployAppScriptFriendlyName
         
         # Initialize scheduling complete flag
         $script:SchedulingComplete = $false
