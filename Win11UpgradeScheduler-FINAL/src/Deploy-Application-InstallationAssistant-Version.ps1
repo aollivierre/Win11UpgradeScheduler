@@ -94,6 +94,9 @@ Try {
     # Import the PSADT v3.10.2 module
     . "$PSScriptRoot\AppDeployToolkit\AppDeployToolkitMain.ps1"
     
+    # Import custom countdown module
+    Import-Module "$PSScriptRoot\PSADTCustomCountdown.psm1" -Force
+    
     # Import custom modules
     if (Test-Path "$dirModules\01-UpgradeScheduler.psm1") {
         Import-Module "$dirModules\01-UpgradeScheduler.psm1" -Force

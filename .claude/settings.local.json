@@ -36,7 +36,10 @@
       "Bash(cmd /c:*)",
       "Bash(start C:Win11UpgradeWindows11InstallationAssistant.exe)",
       "Bash(C:Win11UpgradeWindows11InstallationAssistant.exe /?)",
-      "Bash(del \"C:\\Code\\Windows\\Win11UpgradeScheduler-FINAL\\fix-indentation.ps1\")"
+      "Bash(del \"C:\\Code\\Windows\\Win11UpgradeScheduler-FINAL\\fix-indentation.ps1\")",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }

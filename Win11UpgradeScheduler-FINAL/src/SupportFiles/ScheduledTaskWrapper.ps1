@@ -139,44 +139,129 @@ function Show-CountdownDialog {
     
     Write-WrapperLog -Message "Showing countdown dialog for $Minutes minutes"
     
-    # Check if running as SYSTEM and need to use Execute-ProcessAsUser
+    # Check if running as SYSTEM and need to use ServiceUI
     if (Test-RunningAsSystem) {
-        Write-WrapperLog -Message "Running as SYSTEM, using Execute-ProcessAsUser for UI display"
+        Write-WrapperLog -Message "Running as SYSTEM, using ServiceUI for UI display"
         
         # Load PSADT toolkit to use Execute-ProcessAsUser
         $toolkitMain = Join-Path -Path $PSADTPath -ChildPath 'AppDeployToolkit\AppDeployToolkitMain.ps1'
         . $toolkitMain
         
-        # Create script for user context execution with countdown message
+        # Create a simplified script that avoids complex module loading
         $countdownSeconds = $Minutes * 60
         $countdownScript = @"
-# Load PSADT toolkit
-. '$toolkitMain'
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
 
-# Show countdown message with timeout - single button for clarity
-Show-InstallationPrompt ``
-    -Message "Windows 11 upgrade will begin in $Minutes minutes.`n`nPlease save your work before continuing.`n`nThis dialog will close automatically when the countdown expires.`n`nClick 'Start Now' to begin immediately." ``
-    -ButtonRightText 'Start Now' ``
-    -Icon Information ``
-    -Timeout $countdownSeconds ``
-    -ExitOnTimeout `$true
+# Enable visual styles
+[Windows.Forms.Application]::EnableVisualStyles()
 
-# Always return success (0) whether timeout or button clicked
-exit 0
+# Create form
+`$form = New-Object System.Windows.Forms.Form
+`$form.Text = "Windows 11 Upgrade Scheduled"
+`$form.Size = New-Object System.Drawing.Size(450, 220)
+`$form.StartPosition = "CenterScreen"
+`$form.FormBorderStyle = "FixedDialog"
+`$form.MaximizeBox = `$false
+`$form.MinimizeBox = `$false
+`$form.TopMost = `$true
+
+# Message label
+`$labelMessage = New-Object System.Windows.Forms.Label
+`$labelMessage.Location = New-Object System.Drawing.Point(20, 20)
+`$labelMessage.Size = New-Object System.Drawing.Size(410, 50)
+`$labelMessage.Font = New-Object System.Drawing.Font("Segoe UI", 10)
+`$labelMessage.TextAlign = "MiddleCenter"
+`$labelMessage.Text = "Windows 11 upgrade will begin in $Minutes minutes.`n`nPlease save your work before continuing."
+
+# Countdown label
+`$labelCountdown = New-Object System.Windows.Forms.Label
+`$labelCountdown.Location = New-Object System.Drawing.Point(20, 75)
+`$labelCountdown.Size = New-Object System.Drawing.Size(410, 50)
+`$labelCountdown.Font = New-Object System.Drawing.Font("Segoe UI", 26, [System.Drawing.FontStyle]::Bold)
+`$labelCountdown.TextAlign = "MiddleCenter"
+`$labelCountdown.ForeColor = [System.Drawing.Color]::DarkBlue
+
+# Start Now button
+`$buttonStartNow = New-Object System.Windows.Forms.Button
+`$buttonStartNow.Location = New-Object System.Drawing.Point(175, 140)
+`$buttonStartNow.Size = New-Object System.Drawing.Size(100, 28)
+`$buttonStartNow.Font = New-Object System.Drawing.Font("Segoe UI", 9)
+`$buttonStartNow.Text = "&Start Now"
+`$buttonStartNow.DialogResult = [System.Windows.Forms.DialogResult]::Yes
+
+# Add controls
+`$form.Controls.AddRange(@(`$labelMessage, `$labelCountdown, `$buttonStartNow))
+
+# Timer setup
+`$timer = New-Object System.Windows.Forms.Timer
+`$startTime = Get-Date
+`$countdownTime = `$startTime.AddSeconds($countdownSeconds)
+
+# Timer tick event
+`$timer.Add_Tick({
+    `$currentTime = Get-Date
+    `$remainingTime = `$countdownTime.Subtract(`$currentTime)
+    
+    if (`$countdownTime -le `$currentTime) {
+        `$timer.Stop()
+        `$form.DialogResult = [System.Windows.Forms.DialogResult]::OK
+        `$form.Close()
+    }
+    else {
+        `$totalHours = `$remainingTime.Days * 24 + `$remainingTime.Hours
+        `$labelCountdown.Text = "{0:d2}:{1:d2}:{2:d2}" -f `$totalHours, `$remainingTime.Minutes, `$remainingTime.Seconds
+        
+        if (`$remainingTime.TotalSeconds -le 10) {
+            `$labelCountdown.ForeColor = [System.Drawing.Color]::Red
+        }
+        elseif (`$remainingTime.TotalSeconds -le 30) {
+            `$labelCountdown.ForeColor = [System.Drawing.Color]::DarkOrange
+        }
+    }
+})
+
+# Form load event
+`$form.Add_Load({
+    `$timer.Interval = 100
+    `$timer.Start()
+})
+
+# Show dialog
+`$result = `$form.ShowDialog()
+
+# Cleanup
+`$timer.Stop()
+`$timer.Dispose()
+`$form.Dispose()
+
+if (`$result -eq 'Yes') {
+    exit 1
+} else {
+    exit 0
+}
 "@
         
         $tempScript = Join-Path -Path $env:TEMP -ChildPath "CountdownDialog_$(Get-Date -Format 'yyyyMMddHHmmss').ps1"
         $countdownScript | Set-Content -Path $tempScript -Force
         
         try {
-            # Use Execute-ProcessAsUser to show UI in user context
-            $result = Execute-ProcessAsUser -Path "$PSHOME\powershell.exe" `
-                -Parameters "-ExecutionPolicy Bypass -File `"$tempScript`"" `
-                -Wait
+            # Execute in user context - simpler approach without -Wait
+            Write-WrapperLog -Message "Executing countdown in user context"
+            $taskResult = Execute-ProcessAsUser -Path "$PSHOME\powershell.exe" `
+                -Parameters "-WindowStyle Hidden -ExecutionPolicy Bypass -File `"$tempScript`"" `
+                -Wait `
+                -PassThru
             
-            return ($result.ExitCode -eq 0)
+            Write-WrapperLog -Message "Execute-ProcessAsUser completed with exit code: $($taskResult.ExitCode)"
+            return ($taskResult.ExitCode -eq 1)
+        }
+        catch {
+            Write-WrapperLog -Message "Error executing countdown: $_" -Severity Error
+            return $false
         }
         finally {
+            Start-Sleep -Seconds 2
             Remove-Item -Path $tempScript -Force -ErrorAction SilentlyContinue
         }
     }
@@ -191,16 +276,21 @@ exit 0
 `$scriptPath = Split-Path -Parent `$MyInvocation.MyCommand.Definition
 . "`$scriptPath\AppDeployToolkit\AppDeployToolkitMain.ps1"
 
-# Show countdown message with timeout - single button for clarity
-Show-InstallationPrompt ``
-    -Message "Windows 11 upgrade will begin in $Minutes minutes.`n`nPlease save your work before continuing.`n`nThis dialog will close automatically when the countdown expires.`n`nClick 'Start Now' to begin immediately." ``
-    -ButtonRightText 'Start Now' ``
-    -Icon Information ``
-    -Timeout $countdownSeconds ``
-    -ExitOnTimeout `$true
+# Import custom countdown module
+Import-Module '$PSADTPath\PSADTCustomCountdown.psm1' -Force
 
-# Always return success (0) whether timeout or button clicked
-exit 0
+# Show custom countdown with visual progress
+`$result = Show-CustomCountdownDialog ``
+    -CountdownSeconds $countdownSeconds ``
+    -Message "Windows 11 upgrade will begin in $Minutes minutes.`n`nPlease save your work before continuing." ``
+    -Title "Windows 11 Upgrade Scheduled"
+
+# Return 1 if Start Now was clicked, 0 if countdown completed
+if (`$result -eq 'Yes') {
+    exit 1
+} else {
+    exit 0
+}
 "@
         
         $tempScript = Join-Path -Path $env:TEMP -ChildPath "CountdownDialog_$(Get-Date -Format 'yyyyMMddHHmmss').ps1"
@@ -214,7 +304,7 @@ exit 0
                 -PassThru `
                 -WindowStyle Hidden
             
-            return ($process.ExitCode -eq 0)
+            return ($process.ExitCode -eq 1)
         }
         finally {
             Remove-Item -Path $tempScript -Force -ErrorAction SilentlyContinue
