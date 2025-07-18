@@ -130,6 +130,80 @@ Try {
     }
     #endregion
     
+    #region Helper Functions
+    ##*===============================================
+    ##* FUNCTION: Show-ScheduledPrompt
+    ##*===============================================
+    Function Show-ScheduledPrompt {
+        <#
+        .SYNOPSIS
+            Shows installation prompt with proper handling for SYSTEM context
+        .DESCRIPTION
+            Wraps Show-InstallationPrompt to ensure it displays properly when running as SYSTEM in scheduled mode
+        #>
+        [CmdletBinding()]
+        Param (
+            [Parameter(Mandatory=$true)]
+            [string]$Message,
+            
+            [Parameter(Mandatory=$false)]
+            [string]$ButtonRightText = 'OK',
+            
+            [Parameter(Mandatory=$false)]
+            [ValidateSet('Application','Asterisk','Error','Exclamation','Hand','Information','None','Question','Shield','Warning','WinLogo')]
+            [string]$Icon = 'Information',
+            
+            [Parameter(Mandatory=$false)]
+            [int32]$Timeout = 0
+        )
+        
+        # Check if running as SYSTEM
+        $currentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+        $isSystem = ($currentUser -eq 'NT AUTHORITY\SYSTEM')
+        
+        If ($isSystem -and $ScheduledMode) {
+            Write-Log -Message "Running as SYSTEM in scheduled mode, using Execute-ProcessAsUser for UI display" -Source $deployAppScriptFriendlyName
+            
+            # Create a temporary script to show the prompt
+            $tempScript = Join-Path -Path $env:TEMP -ChildPath "ScheduledPrompt_$(Get-Date -Format 'yyyyMMddHHmmss').ps1"
+            
+            $scriptContent = @"
+# Load PSADT toolkit
+`$scriptPath = '$PSScriptRoot'
+. "`$scriptPath\AppDeployToolkit\AppDeployToolkitMain.ps1"
+
+# Show the prompt
+Show-InstallationPrompt -Message '$($Message -replace "'", "''")'` -ButtonRightText '$ButtonRightText' -Icon '$Icon' -Timeout $Timeout
+"@
+            
+            $scriptContent | Set-Content -Path $tempScript -Force
+            
+            Try {
+                # Execute the prompt in user context
+                $result = Execute-ProcessAsUser -Path "$PSHOME\powershell.exe" `
+                    -Parameters "-WindowStyle Hidden -ExecutionPolicy Bypass -File `"$tempScript`"" `
+                    -Wait `
+                    -PassThru
+                
+                Write-Log -Message "Execute-ProcessAsUser completed with exit code: $($result.ExitCode)" -Source $deployAppScriptFriendlyName
+            }
+            Catch {
+                Write-Log -Message "Failed to show prompt via Execute-ProcessAsUser: $_" -Severity 2 -Source $deployAppScriptFriendlyName
+                # Fall back to regular prompt
+                Show-InstallationPrompt -Message $Message -ButtonRightText $ButtonRightText -Icon $Icon -Timeout $Timeout
+            }
+            Finally {
+                Start-Sleep -Seconds 1
+                Remove-Item -Path $tempScript -Force -ErrorAction SilentlyContinue
+            }
+        }
+        Else {
+            # Not running as SYSTEM or not in scheduled mode, use regular prompt
+            Show-InstallationPrompt -Message $Message -ButtonRightText $ButtonRightText -Icon $Icon -Timeout $Timeout
+        }
+    }
+    #endregion
+    
     #region Pre-Installation
     If ($deploymentType -ieq 'Install') {
         Write-Log -Message "Starting $installTitle deployment" -Source $deployAppScriptFriendlyName
@@ -185,7 +259,7 @@ Try {
                     }
                     $issueMessage += "`nThe scheduled upgrade has been cancelled. Please resolve these issues and reschedule."
                     
-                    Show-InstallationPrompt -Message $issueMessage `
+                    Show-ScheduledPrompt -Message $issueMessage `
                         -ButtonRightText 'OK' `
                         -Icon Error `
                         -Timeout 300
@@ -200,6 +274,10 @@ Try {
                     Catch {
                         Write-Log -Message "Failed to remove scheduled task: $_" -Severity 2 -Source $deployAppScriptFriendlyName
                     }
+                    
+                    # Disable balloon notifications for preflight check failures
+                    $configShowBalloonNotifications = $false
+                    $script:PreflightCheckFailed = $true
                     
                     Exit-Script -ExitCode 1618
                 }
@@ -546,6 +624,11 @@ Quick scheduling options:
                     -Icon Error
                 
                 Write-Log -Message "Pre-flight checks failed: $($preFlightResults.Issues -join '; ')" -Severity 2 -Source $deployAppScriptFriendlyName
+                
+                # Disable balloon notifications for preflight check failures
+                $configShowBalloonNotifications = $false
+                $script:PreflightCheckFailed = $true
+                
                 Exit-Script -ExitCode 1618
             }
             
@@ -989,8 +1072,8 @@ Catch {
     Exit-Script -ExitCode 60001
 }
 Finally {
-    # Only call Exit-Script if we haven't already exited due to OS check
-    if (-not $script:OSCheckFailed) {
+    # Only call Exit-Script if we haven't already exited due to OS check or preflight check failure
+    if (-not $script:OSCheckFailed -and -not $script:PreflightCheckFailed) {
         # Call the Exit-Script function to perform final cleanup operations
         Exit-Script -ExitCode $mainExitCode
     }
