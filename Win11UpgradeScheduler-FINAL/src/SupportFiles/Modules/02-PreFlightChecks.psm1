@@ -4,6 +4,7 @@
     Pre-Flight Checks Module for Windows 11 Upgrade (FINAL)
 .DESCRIPTION
     Validates system readiness before Windows 11 upgrade by checking conditions that can fluctuate:
+    - Windows version (soft warning for builds < 19041)
     - Disk space (with flexible thresholds)
     - Battery level (laptops)
     - Windows Update status
@@ -14,9 +15,11 @@
     not pre-flight, as they don't change between scheduling and execution.
     
 .NOTES
-    Version:        2.0.0
-    Updated:        2025-01-17
-    Changes:        Removed TPM checking (moved to detection phase)
+    Version:        2.1.0
+    Updated:        2025-01-18
+    Changes:        Added Windows version check (Phase 1 enhancement)
+                   Issues soft warning for Windows 10 builds < 19041
+                   Removed TPM checking (moved to detection phase)
                    Focus on fluctuating conditions only
 #>
 #endregion
@@ -392,6 +395,91 @@ function Test-PendingReboot {
     }
 }
 
+function Test-WindowsVersion {
+    <#
+    .SYNOPSIS
+        Checks Windows version meets minimum requirements
+    .DESCRIPTION
+        Validates that Windows 10 build is 19041 (version 2004) or higher.
+        Issues a WARNING only - does not block upgrade process.
+        Windows 11 Installation Assistant will make final compatibility decision.
+    .EXAMPLE
+        Test-WindowsVersion
+    #>
+    [CmdletBinding()]
+    param()
+    
+    Write-PreFlightLog -Message "Checking Windows version requirements"
+    
+    try {
+        # Get Windows version info
+        $os = Get-CimInstance -ClassName Win32_OperatingSystem
+        $buildNumber = [int]$os.BuildNumber
+        
+        # Get more detailed version info
+        $currentVersion = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name DisplayVersion -ErrorAction SilentlyContinue).DisplayVersion
+        if ($null -eq $currentVersion) {
+            $currentVersion = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ReleaseId -ErrorAction SilentlyContinue).ReleaseId
+        }
+        
+        $productName = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName -ErrorAction SilentlyContinue).ProductName
+        
+        Write-PreFlightLog -Message "Detected: $productName, Version: $currentVersion, Build: $buildNumber"
+        
+        # Check if already on Windows 11
+        if ($buildNumber -ge 22000) {
+            Write-PreFlightLog -Message "System is already running Windows 11 (Build: $buildNumber)"
+            return @{
+                Passed = $true
+                Message = "Already running Windows 11"
+                BuildNumber = $buildNumber
+                Version = $currentVersion
+                MinimumBuild = 19041
+                Severity = 'Information'
+            }
+        }
+        
+        # Check Windows 10 minimum build requirement (19041 = version 2004)
+        if ($buildNumber -lt 19041) {
+            Write-PreFlightLog -Message "WARNING: Windows 10 build $buildNumber is below minimum requirement (19041)" -Severity Warning
+            Write-PreFlightLog -Message "Windows 11 requires Windows 10 version 2004 or later" -Severity Warning
+            Write-PreFlightLog -Message "Current version: $currentVersion (Build: $buildNumber)" -Severity Warning
+            Write-PreFlightLog -Message "Proceeding anyway - Windows 11 Installation Assistant will verify final compatibility" -Severity Warning
+            
+            return @{
+                Passed = $true  # Still pass but with warning
+                Message = "Windows 10 build $buildNumber is below recommended minimum (19041). Windows 11 requires version 2004 or later. Proceeding - installer will verify compatibility."
+                BuildNumber = $buildNumber
+                Version = $currentVersion
+                MinimumBuild = 19041
+                Severity = 'Warning'
+            }
+        }
+        
+        # Build meets requirements
+        return @{
+            Passed = $true
+            Message = "Windows version meets requirements (Build: $buildNumber)"
+            BuildNumber = $buildNumber
+            Version = $currentVersion
+            MinimumBuild = 19041
+            Severity = 'Information'
+        }
+    }
+    catch {
+        Write-PreFlightLog -Message "Error checking Windows version: $_" -Severity Warning
+        # Don't fail on version check errors - let installer decide
+        return @{
+            Passed = $true
+            Message = "Unable to verify Windows version. Proceeding - installer will verify compatibility."
+            BuildNumber = 0
+            Version = "Unknown"
+            MinimumBuild = 19041
+            Severity = 'Warning'
+        }
+    }
+}
+
 function Test-SystemResources {
     <#
     .SYNOPSIS
@@ -509,6 +597,18 @@ function Test-SystemReadiness {
         Checks = @{}
     }
     
+    # Run Windows version check (Phase 1 enhancement)
+    Write-Verbose "Checking Windows version..."
+    $versionCheck = Test-WindowsVersion
+    $results.Checks['WindowsVersion'] = $versionCheck
+    if ($versionCheck.Severity -eq 'Error') {
+        $results.IsReady = $false
+        $results.Issues += $versionCheck.Message
+    }
+    elseif ($versionCheck.Severity -eq 'Warning') {
+        $results.Warnings += $versionCheck.Message
+    }
+    
     # Run disk space check
     Write-Verbose "Checking disk space..."
     $diskCheck = Test-DiskSpace
@@ -600,6 +700,7 @@ function Test-SystemReadiness {
 #region Module Export
 Export-ModuleMember -Function @(
     'Test-SystemReadiness'
+    'Test-WindowsVersion'
     'Test-DiskSpace'
     'Test-BatteryLevel'
     'Test-WindowsUpdateStatus'
